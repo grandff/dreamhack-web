@@ -1,10 +1,10 @@
 '''
 !!solution!!
-
+- /admin/notice_flag 소스를 보면 localhost인 경우에만 처리하도록 되어있음
+- img 태그에서 src attribute를 /admin/notice_flag로 하고 get parameter만 던지면 해결
 '''
-
 #!/usr/bin/python3
-from flask import Flask, request, render_template, make_response, redirect, url_for
+from flask import Flask, request, render_template
 from selenium import webdriver
 import urllib
 import os
@@ -17,12 +17,6 @@ try:
 except:
     FLAG = "[**FLAG**]"
 
-users = {
-    'guest': 'guest',
-    'admin': FLAG
-}
-
-session_storage = {}
 
 def read_url(url, cookie={"name": "name", "value": "value"}):
     cookie.update({"domain": "127.0.0.1"})
@@ -58,13 +52,7 @@ def check_csrf(param, cookie={"name": "name", "value": "value"}):
 
 @app.route("/")
 def index():
-    session_id = request.cookies.get('sessionid', None)
-    try:
-        username = session_storage[session_id]
-    except KeyError:
-        return render_template('index.html', text='please login')
-
-    return render_template('index.html', text=f'Hello {username}, {"flag is " + FLAG if username == "admin" else "you are not an admin"}')
+    return render_template("index.html")
 
 
 @app.route("/vuln")
@@ -82,44 +70,33 @@ def flag():
         return render_template("flag.html")
     elif request.method == "POST":
         param = request.form.get("param", "")
-        session_id = os.urandom(16).hex()
-        session_storage[session_id] = 'admin'
-        if not check_csrf(param, {"name":"sessionid", "value": session_id}):
+        if not check_csrf(param):
             return '<script>alert("wrong??");history.go(-1);</script>'
 
         return '<script>alert("good");history.go(-1);</script>'
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'GET':
-        return render_template('login.html')
-    elif request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-        try:
-            pw = users[username]
-        except:
-            return '<script>alert("not found user");history.go(-1);</script>'
-        if pw == password:
-            resp = make_response(redirect(url_for('index')) )
-            session_id = os.urandom(8).hex()
-            session_storage[session_id] = username
-            resp.set_cookie('sessionid', session_id)
-            return resp 
-        return '<script>alert("wrong password");history.go(-1);</script>'
+memo_text = ""
 
 
-@app.route("/change_password")
-def change_password():
-    pw = request.args.get("pw", "")
-    session_id = request.cookies.get('sessionid', None)
-    try:
-        username = session_storage[session_id]
-    except KeyError:
-        return render_template('index.html', text='please login')
+@app.route("/memo")
+def memo():
+    global memo_text
+    text = request.args.get("memo", None)
+    if text:
+        memo_text += text
+    return render_template("memo.html", memo=memo_text)
 
-    users[username] = pw
-    return 'Done'
+
+@app.route("/admin/notice_flag")
+def admin_notice_flag():
+    global memo_text
+    if request.remote_addr != "127.0.0.1":
+        return "Access Denied"
+    if request.args.get("userid", "") != "admin":
+        return "Access Denied 2"
+    memo_text += f"[Notice] flag is {FLAG}\n"
+    return "Ok"
+
 
 app.run(host="0.0.0.0", port=8000)
