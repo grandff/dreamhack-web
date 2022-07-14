@@ -11,7 +11,7 @@ import subprocess
 
 from flask import Flask, request, render_template, redirect
 
-from flag import FLAG
+#from flag import FLAG
 
 APP = Flask(__name__)
 
