@@ -67,3 +67,111 @@ MySQL의 경우 숫자를 비트 형태로 변환하는 bin이라는 함수 제�
 ## Short-circuit evaluation <br/>
 
 ## Time based SQL Injection <br/>
+
+## System Tables
+### MySQL
+1. 시스템 테이블 
+information_schema, mysql, performance_schema, sys
+2. 스키마 정보
+```sql
+select TABLE_SCHEMA from information_schema.tables group by TABLE_SCHEMA;
+```
+3. 테이블 정보
+```sql
+select TABLE_SCHEMA, TABLE_NAME from information_schema.TABLES;
+```
+4. 컬럼 정보
+```sql
+select TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME from information_schema.COLUMNS;
+```
+5. 실시간 실행 쿼리 정보
+```sql
+select * from information_schema.PROCESSLIST;   # 실시간 실행 쿼리
+select user,current_statement from sys.session; # 계정 및 실시간 실행 쿼리
+```
+6. DBMS 계정 정보
+```sql
+select GRANTEE,PRIVILEGE_TYPE,IS_GRANTABLE from information_schema.USER_PRIVILEGES; # DBMS 권한 및 계정 정보
+select User, authentication_string from mysql.user; # DBMS 계정 정보
+```
+
+### MSSQL
+1. 시스템 테이블
+master, tempdb, model, msdb
+```sql
+SELECT name FROM sys.databases
+```
+2. 데이터베이스 정보
+```sql
+SELECT name FROM master..sysdatabases;
+SELECT DB_NAME(1);
+```
+3. 테이블 정보
+```sql
+SELECT name FROM dreamhack..sysobjects WHERE xtype = 'U'; 
+SELECT table_name FROM dreamhack.information_schema.tables;
+```
+4. 컬럼 정보
+```sql
+SELECT name FROM syscolumns WHERE id = (SELECT id FROM sysobjects WHERE name = 'users');
+SELECT table_name, column_name FROM dreamhack.information_schema.columns;
+```
+5. DBMS 계정 정보
+```sql
+SELECT name, password_hash FROM master.sys.sql_logins;
+SELECT * FROM master..syslogins;
+```
+
+### PostgreSQL
+1. 초기 데이터 베이스
+postgres, template1, template0
+2. 스키마 정보
+pg_catalog, infomation_schema
+```sql
+select nspname from pg_catalog.pg_namespace;
+```
+3. 테이블 정보
+```sql
+select table_name from information_schema.tables where table_schema='pg_catalog';
+select table_name from information_schema.tables where table_schema='information_schema';
+```
+4. DBMS 계정 정보
+```sql
+select usename, passwd from pg_catalog.pg_shadow;
+```
+5. DBMS 설정 정보
+```sql
+select name, setting from pg_catalog.pg_settings;
+```
+6. 실시간 실행 쿼리 확인
+```sql
+select usename, query from pg_catalog.pg_stat_activity;
+```
+7. 테이블 정보
+```sql
+select table_schema, table_name from information_schema.tables;
+```
+8. 컬럼 정보
+```sql
+select table_schema, table_name, column_name from information_schema.columns;
+```
+
+### Oracle
+1. 데이터베이스 정보
+```sql
+SELECT DISTINCT owner FROM all_tables
+SELECT owner, table_name FROM all_tables
+```
+2. 컬럼 정보
+```sql
+SELECT column_name FROM all_tab_columns WHERE table_name = 'users'
+```
+3. DBMS 계정 정보
+```sql
+SELECT * FROM all_users
+```
+
+## DBMS Fingerprinting
+SQL Injection 취약점을 발견하면 제일 먼저 알아내야 할 정보는 DBMS의 종류와 버전. 이를 통해 수월한 공격을 할 수 있음. <br/>
+
+### 
