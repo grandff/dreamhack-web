@@ -38,7 +38,19 @@ template ='''
 '''
 
 keywords = ['union', 'select', 'from', 'and', 'or', 'admin', ' ', '*', '/', 
-            '\n', '\r', '\t', '\x0b', '\x0c', '-', '+'] # \v, \f 
+            '\n', '\r', '\t', '\x0b', '\x0c', '-', '+'] # \v, \f   
+            
+'''
+\n %0a            
+\t $09
+\v %0b
+\f %0c
+\r %0d
+/**/
+()
++
+'''
+
 def check_WAF(data):
     for keyword in keywords:
         if keyword in data.lower():
