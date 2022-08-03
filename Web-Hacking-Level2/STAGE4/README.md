@@ -94,5 +94,80 @@ error: {
 
 
 ## Redis
+### SSRF 공격
+유효하지 않은 명령어가 입력돼도 다음 명령어를 실행함.
+```
+$ echo -e "anydata: anydata\r\nget hello" | nc 127.0.0.1 6379
+-ERR unknown command 'anydata:'
+$5
+world
+```
+대표적으로 HTTP 프로토콜을 사용해서 공격함
+```
+POST / HTTP/1.1
+host: 127.0.0.1:6379
+user-agent: Mozilla/5.0...
+content-type: application/x-www-form-urlencoded
+data=a
+SET key value
+...
+```
+
+### django-redis-cache
+Django에서 Redis를 사용한 캐시를 구현할 수 있는 파이썬 모듈.
+```python
+# settings.py
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/"
+    }
+}
+# views.py
+from django.http import HttpResponse
+from .models import Memo
+from django.core.cache import cache
+def p_set(request):
+    cache.set('cache_memo', Memo('memo test!!'))
+    return HttpResponse('set seesion')
+```
+
+### 실습모듈
+```python
+app = Flask(__name__)
+app.secret_key = os.urandom(32)
+DEV_MODE = True
+REDIS_HOST = '127.0.0.1'
+conn = redis.Redis(host=REDIS_HOST, charset='utf-8', decode_responses=True)
+@app.route('/email_send', methods=['GET', 'POST'])
+def email_send():
+  if request.method == 'GET':
+    return render_template('email_send.html')
+  elif request.method == 'POST':
+    email = request.form.get('email', '')
+    rand = f'{random.randint(0, 999999):06d}'
+    if DEV_MODE or send_mail(email, rand):  # if DEV_MODE disable send_mail
+      conn.set(email, rand)
+      conn.set(f'{email}_count', '0')
+      return 'send_mail'
+    else:
+      return 'Fail send_mail'
+@app.route('/email_verify', methods=['POST'])
+def email_verify():
+  email = request.form.get('email', '')
+  auth_code = request.form.get('auth_code', '')
+  if conn.get(email) == auth_code:
+    conn.delete(email)
+    # Verify OK !
+    return f'Success, Flag is {FLAG.FLAG}'
+  conn.incr(f'{email}_count')
+  count = int(conn.get(f'{email}_count'))
+  if count > 5:
+    return 'Limit'
+  return 'Fail'
+app.run(host='0.0.0.0', port=5000, threaded=True)
+```
+
+
 
 ## CouchDB
