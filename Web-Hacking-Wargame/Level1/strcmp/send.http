@@ -1,0 +1,7 @@
+
+POST http://host3.dreamhack.games:23881/
+Content-Type: application/x-www-form-urlencoded
+
+{
+    "password" : ["123", "456"]
+}
