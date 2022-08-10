@@ -6,3 +6,4 @@
 - no=5 || length(pw) = 32 를 통해 true일 경우 admin을 리턴, false일 경우 빈값이 리턴되는걸 확인할 수 있음
     - password 길이는 32인걸 확인
 
+- like와 char를 사용해서 pw 를 찾아내는 인젝션 수행
