@@ -5,7 +5,7 @@ from urllib import parse
 # 세션활성화
 s = requests.Session()
 
-host = "http://host3.dreamhack.games:11194/?no=5||"
+host = "http://host3.dreamhack.games:19463/?no=5||"
 
 
 # 패스워드 길이는 총 32
