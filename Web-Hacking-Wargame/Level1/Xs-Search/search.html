@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+
+{% block head %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+<h2>Search</h2><br/>
+{% if result %}
+  <h3>Searching "{{ query }}" found</h3>
+  <iframe srcdoc="<pre>{{ result }}</pre>"></iframe>
+{% elif query %}
+  <h3> Searching "{{ query }}" not found</h3>
+{% else %}
+  <form method="GET" class="form-inline">
+      <div class="form-group">
+          <label class="sr-only" for="query">/</label>
+          <div class="input-group">
+              <div class="input-group-addon">Query: </div>
+              <input type="text" class="form-control" id="query" name="query" placeholder="DreamHack">
+          </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+{% endif %}
+{% endblock %}
