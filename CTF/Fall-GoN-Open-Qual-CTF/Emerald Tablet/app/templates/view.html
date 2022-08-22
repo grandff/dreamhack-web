@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if form is None %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col" class="col-1">ID</th>
+        <th scope="col" class="col-2">Inscriber</th>
+        <th scope="col" class="col-5">Title</th>
+        <th scope="col" class="col-2">Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">{{ inscription.id }}</th>
+        <td>{{ inscription.inscriber }}</td>
+        <td>{{ inscription.title }}</td>
+        <td>{{ inscription.time }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><b>Key: {{ inscription.key }}</b></p>
+  <textarea readonly class="form-control-plaintext">
+  {{ inscription.content.data }}
+  </textarea>
+{% else %}
+  {% if alertText %}
+  <script>
+    alert("{{ alertText }}");
+    history.back();
+  </script>
+  {% endif %}
+  <form action="/view/" method="get">
+    {{ form }}
+    <input type="submit" value="Submit">
+  </form>
+{% endif %}
+{% endblock content %}

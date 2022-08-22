@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<table class="table table-hover">
+  <thead>
+    <tr onclick="doSort(event)">
+      <th scope="col" class="col-1" key="id">ID</th>
+      <th scope="col" class="col-2" key="inscriber">Inscriber</th>
+      <th scope="col" class="col-5" key="title">Title</th>
+      <th scope="col" class="col-2" key="time">Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if sort_rev %}
+      {% for inscription in inscriptions|dictsortreversed:sort_key %}
+        {% include 'list_row.html' %}
+      {% endfor %}
+    {% else %}
+      {% for inscription in inscriptions|dictsort:sort_key %}
+        {% include 'list_row.html' %}
+      {% endfor %}
+    {% endif %}
+  </tbody>
+</table>
+<script>
+  const curSortKey = "{{ sort_key }}";
+  const curSortRev = {{ sort_rev|yesno:'true,false' }};
+  function doSort(event) {
+    const key = event.target.getAttribute("key");
+    if (key) {
+      if (curSortKey !== key) {
+        location.href = `/list/?sort=${key}`;
+      } else {
+        location.href = `/list/?sort=${curSortRev ? '' : '-'}${key}`;
+      }
+    }
+  }
+  function doView(id) {
+    const key = prompt(`Input key for inscription #${id}:`);
+    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(key)) {
+      location.href = `/view/?id=${id}&key=${key}`;
+    } else {
+      alert('Invalid key format!');
+    }
+  }
+</script>
+<style>
+  thead th:hover {
+    background-color: rgba(0,0,0,.075);
+  }
+</style>
+{% endblock content %}
