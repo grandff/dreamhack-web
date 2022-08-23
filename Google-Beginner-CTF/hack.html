@@ -1,0 +1,56 @@
+<script>
+// like python in range
+function range(start, stop, step) {
+    if (typeof stop == 'undefined') {
+        // one param defined
+        stop = start;
+        start = 0;
+    }
+
+    if (typeof step == 'undefined') {
+        step = 1;
+    }
+
+    if ((step > 0 && start >= stop) || (step < 0 && start <= stop)) {
+        return [];
+    }
+
+    var result = [];
+    for (var i = start; step > 0 ? i < stop : i > stop; i += step) {
+        result.push(i);
+    }
+
+    return result;
+};
+
+const main = () => {
+    let fullPassword = "";
+    let checkPassword;
+
+
+    const pwdAry = [52037,52077,52077,52066,52046,52063,52081,52081,52085,52077,52080,52066]
+
+    for(const pwdStr of pwdAry){
+        for (const i of range(47,123)) {
+            let pwdInject = 0xCafe + String.fromCharCode(i);
+            if(pwdInject === pwdStr){
+                console.log(`password find !! ${String.fromCharCode(i)}`)
+                fullPassword += String.fromCharCode(i);
+                break;
+            }
+        }
+    }
+}
+
+main();
+
+//fromCharCode 
+
+
+
+//for j in range(47, 123) : # 48~57 0~9 / 65 ~90 A-Z 97~122 a-z    
+
+
+
+
+</script>
