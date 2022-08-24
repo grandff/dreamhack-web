@@ -27,12 +27,12 @@ const main = () => {
     let fullPassword = "";
     let checkPassword;
 
-
     const pwdAry = [52037,52077,52077,52066,52046,52063,52081,52081,52085,52077,52080,52066]
 
     for(const pwdStr of pwdAry){
         for (const i of range(47,123)) {
-            let pwdInject = 0xCafe + String.fromCharCode(i);
+            let pwdInject = 0xCafe + String.fromCharCode(i).charCodeAt(0);
+            //console.log(pwdInject, pwdStr , (pwdInject === pwdStr));
             if(pwdInject === pwdStr){
                 console.log(`password find !! ${String.fromCharCode(i)}`)
                 fullPassword += String.fromCharCode(i);
@@ -40,6 +40,8 @@ const main = () => {
             }
         }
     }
+
+    console.log(`password is ${fullPassword}`)
 }
 
 main();
