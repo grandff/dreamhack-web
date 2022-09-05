@@ -1,7 +1,7 @@
-function controlCar(scanArray){    
-    // 5.25 ? 6.25? 여기서 핸들을 바꿔야함..
+function controlCar(scanArray){        
     // -1 : left, 0 : straight, 1: right
-
+    const maxLimit = 13;
+    const defaultLimit = 12;    
     const frontL = scanArray[7];
     const frontR = scanArray[9];
     const frontC = scanArray[8];
@@ -9,30 +9,113 @@ function controlCar(scanArray){
     let result = 0;
     
     console.log("============== flag start ==============");
-    if(frontL >= 8 && frontR >= 8 && frontC >= 8){ // 직진
+    if(frontL >= maxLimit && frontR >= maxLimit && frontC >= maxLimit){ // 직진
         console.log("keep staright...");
         result = 0;
         
     }else{  // 핸들을 틀거임        
         console.log("need avoid..!!!!", frontL, frontR, frontC);
 
-        if(frontL < 8) console.log("need to go right");
-        if(frontR < 8) console.log("need to go left");
+        let rightRoad = scanArray[basicIndex[2]+=2] * 1;
+        let rightRoadClose = scanArray[basicIndex[2]+=1] * 1;
+        let rightSide = scanArray[basicIndex[2]] * 1;
+        let leftRoad = scanArray[basicIndex[0]-=2] * 1;
+        let leftRoadClose = scanArray[basicIndex[0]-=1] * 1;
+        let leftSide = scanArray[basicIndex[0]] * 1;
 
-        console.log("left check...")
-        if(scanArray[basicIndex[0]-=2] > 8 && frontR < 8){            
-            console.log("go to right ... left side is ... " + scanArray[basicIndex[0]-=2]);
-            result = -1;            
+        if(frontL < defaultLimit ) console.log("need to go right", rightRoad, rightRoadClose);
+        if(frontR < defaultLimit ) console.log("need to go left", leftRoad, leftRoadClose);
+        if(frontC < defaultLimit ) console.log("front check : ", rightRoad, rightRoadClose, leftRoad, leftRoadClose);
+
+        console.log(`left flag : ${(leftRoad > 8 && frontR < 8)}, right flag : ${(rightRoad > 8 && frontL < 8)}`);
+        
+        // left
+        if(frontR < defaultLimit){
+            if(leftRoad > defaultLimit){
+                console.log("go to left more")
+                result = -5;            
+            }
+
+            if(leftRoadClose > defaultLimit){
+                console.log("go to left")
+                result = -1;            
+            }
+
+
+            if(rightSide < defaultLimit) {
+                console.log("rightSide check than go left")
+                result = -1;
+            }
+
+            
+            if(rightRoad === 0 && rightRoadClose === 0){
+                console.log("go to left2")
+                result = -1;
+            }
         }
 
-        console.log("right check...")
-        if(scanArray[basicIndex[2]+=2] > 8 && frontL < 8){
-            console.log("go to left ... right side is ... " + scanArray[basicIndex[2]+=2]);
-            result = 1;
-        }                
+        // right
+        if(frontL < defaultLimit){
+            if(rightRoad > defaultLimit){
+                console.log("go to right more")
+                result = 5;            
+            }
+
+            if(rightRoadClose > defaultLimit){
+                console.log("go to right ")
+                result = 1;            
+            }
+
+            if(leftSide < defaultLimit) {
+                console.log("leftside check than go right")
+                result = 1;
+            }
+
+            if(leftRoad === 0 && leftRoadClose === 0) {
+                console.log("go to right2")
+                result = 1;                
+            }
+        }     
+        
+        // center check
+        if(frontC < defaultLimit){
+            
+            if(leftRoad > defaultLimit){
+                console.log("(straight) go to left more")
+                result = -5;            
+            }
+
+            if(leftRoadClose > defaultLimit){
+                console.log("(straight) go to left")
+                result = -1;            
+            }
+
+            
+            if(rightRoad > defaultLimit){
+                console.log("(straight) go to right more")
+                result = 5;            
+            }
+
+            if(rightRoadClose > defaultLimit){
+                console.log("(straight) go to right")
+                result = 1;            
+            }
+
+            
+            if(rightRoad === 0 && rightRoadClose === 0) {
+                console.log("(straight) go to left")
+                result = -1;
+            }
+
+            
+            if(leftRoad === 0 && leftRoadClose === 0){
+                console.log("(straight) go to right2")
+                result = 1;
+            }
+        }
                         
     }
-
+    console.log(`result : ${result}`)
     console.log("============== flag end ==============");
     return result;
     
